@@ -46,7 +46,7 @@ TEST(SchemaRegistryManager, OpsetRegTest) {
 
   // Register op-set version 1 with baseline version 0
   std::vector<ONNX_NAMESPACE::OpSchema> schema = {CreateTestSchema("Op1", "Domain1", 1), CreateTestSchema("Op2", "Domain1", 1)};
-  ASSERT_TRUE(registry->RegisterOpSet(schema, "Domain1", 0, 1).IsOK());
+  ASSERT_STATUS_OK(registry->RegisterOpSet(schema, "Domain1", 0, 1));
 
   // Get the schema
   ASSERT_TRUE(registry->GetSchema("Op1", 1, "Domain1")->Name() == "Op1");
@@ -66,7 +66,7 @@ TEST(SchemaRegistryManager, OpsetRegTest) {
 
   // Registering a second op-set in a different domain should succeed
   std::vector<ONNX_NAMESPACE::OpSchema> schemaDomain2 = {CreateTestSchema("Op2", "Domain2", 1)};
-  ASSERT_TRUE(registry->RegisterOpSet(schemaDomain2, "Domain2", 0, 1).IsOK());
+  ASSERT_STATUS_OK(registry->RegisterOpSet(schemaDomain2, "Domain2", 0, 1));
   ASSERT_TRUE(registry->GetSchema("Op1", 1, "Domain1")->Name() == "Op1");
   ASSERT_TRUE(registry->GetSchema("Op2", 1, "Domain2")->Name() == "Op2");
 
@@ -81,7 +81,7 @@ TEST(SchemaRegistryManager, OpsetRegTest) {
   manager.RegisterRegistry(registry2);
 
   // Register the second version of the same op-set on the second registry, overriding one operator
-  ASSERT_TRUE(registry2->RegisterOpSet(schemaV2, "Domain1", 1, 2).IsOK());
+  ASSERT_STATUS_OK(registry2->RegisterOpSet(schemaV2, "Domain1", 1, 2));
   //Now the registry1 has: (op1,domain1,version1), (op2,domain1,version1), (op2,domain2,version1)
   //registry2 has:(op1,domain1,version2)
   ASSERT_TRUE(registry2->GetSchema("Op1", 1, "Domain1") == nullptr);
@@ -90,7 +90,7 @@ TEST(SchemaRegistryManager, OpsetRegTest) {
   ASSERT_TRUE(registry2->GetSchema("Op1", 3, "Domain1") == nullptr);
 
   std::shared_ptr<onnxruntime::OnnxRuntimeOpSchemaRegistry> registry3 = std::make_shared<OnnxRuntimeOpSchemaRegistry>();
-  ASSERT_TRUE(registry3->RegisterOpSet(schemaV2, "Domain1", 1, 3).IsOK());
+  ASSERT_STATUS_OK(registry3->RegisterOpSet(schemaV2, "Domain1", 1, 3));
   //Now it's ok.
   ASSERT_TRUE(registry3->GetSchema("Op1", 3, "Domain1") != nullptr);
 
@@ -107,7 +107,7 @@ TEST(SchemaRegistryManager, OpsetRegTest) {
       CreateTestSchema("Op3", "Domain1", 4),
       CreateTestSchema("Op4", "Domain1", 5),
       CreateTestSchema("Op5", "Domain1", 1)};
-  ASSERT_TRUE(registryV5->RegisterOpSet(schemaV5, "Domain1", 4, 5).IsOK());
+  ASSERT_STATUS_OK(registryV5->RegisterOpSet(schemaV5, "Domain1", 4, 5));
 
   // Query the new version 5 op.  This will be missing for earlier versions
   ASSERT_TRUE(manager.GetSchema("Op4", 5, "Domain1")->since_version() == 5);

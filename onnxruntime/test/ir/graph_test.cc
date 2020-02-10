@@ -167,8 +167,7 @@ TEST_F(GraphTest, SimpleAddWithoutDomain) {
   ImportOpset(*m, "", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), nullptr);
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_TRUE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, SimpleAddDefaultDomain) {
@@ -177,8 +176,7 @@ TEST_F(GraphTest, SimpleAddDefaultDomain) {
   ImportOpset(*m, "", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), "");
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_TRUE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, SimpleAddFutureOpSet) {
@@ -188,7 +186,7 @@ TEST_F(GraphTest, SimpleAddFutureOpSet) {
   ConstructASimpleAddGraph(*m->mutable_graph(), "ai.onnx");
   std::shared_ptr<Model> model;
   Status st;
-  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK());
 }
 
 TEST_F(GraphTest, SimpleAddONNXDomain) {
@@ -197,8 +195,7 @@ TEST_F(GraphTest, SimpleAddONNXDomain) {
   ImportOpset(*m, "", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), "ai.onnx");
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_TRUE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, SimpleAddONNXDomain2) {
@@ -207,8 +204,7 @@ TEST_F(GraphTest, SimpleAddONNXDomain2) {
   ImportOpset(*m, "ai.onnx", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), "ai.onnx");
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_TRUE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, SimpleAddWrongDomain) {
@@ -217,8 +213,7 @@ TEST_F(GraphTest, SimpleAddWrongDomain) {
   ImportOpset(*m, "", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), "AAAA");
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, SimpleAddWrongDomain2) {
@@ -227,8 +222,7 @@ TEST_F(GraphTest, SimpleAddWrongDomain2) {
   ImportOpset(*m, "AAAA", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), "AAAA");
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, SimpleUnique) {
@@ -248,8 +242,7 @@ TEST_F(GraphTest, SimpleUnique) {
   output->set_name("sum");
   SetTypeAndShape(output->mutable_type()->mutable_tensor_type(), 1, {60});
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_TRUE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, WrongOpset) {
@@ -270,8 +263,7 @@ TEST_F(GraphTest, WrongOpset) {
   output->set_name("sum");
   SetTypeAndShape(output->mutable_type()->mutable_tensor_type(), 1, {60});
   std::shared_ptr<Model> model;
-  Status st;
-  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK());
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
 }
 
 TEST_F(GraphTest, ExtraInput) {
@@ -320,7 +312,7 @@ TEST_F(GraphTest, LocalCustomRegistry) {
   std::shared_ptr<Model> model;
   Status st;
   std::list<std::shared_ptr<IOnnxRuntimeOpSchemaCollection>> regs = {registry};
-  ASSERT_TRUE((st = Model::Load(std::move(m), model, &regs, *logger_)).IsOK()) << st.ErrorMessage();
+  ASSERT_STATUS_OK(Model::Load(std::move(m), model, &regs, *logger_));
 }
 
 TEST_F(GraphTest, LocalCustomRegistryWrongOpsetImportVersion) {
