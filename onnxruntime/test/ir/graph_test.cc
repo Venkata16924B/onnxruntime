@@ -213,7 +213,8 @@ TEST_F(GraphTest, SimpleAddWrongDomain) {
   ImportOpset(*m, "", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), "AAAA");
   std::shared_ptr<Model> model;
-  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
+  Status st;
+  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK());
 }
 
 TEST_F(GraphTest, SimpleAddWrongDomain2) {
@@ -222,7 +223,8 @@ TEST_F(GraphTest, SimpleAddWrongDomain2) {
   ImportOpset(*m, "AAAA", 10);
   ConstructASimpleAddGraph(*m->mutable_graph(), "AAAA");
   std::shared_ptr<Model> model;
-  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
+  Status st;
+  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK());
 }
 
 TEST_F(GraphTest, SimpleUnique) {
@@ -263,7 +265,8 @@ TEST_F(GraphTest, WrongOpset) {
   output->set_name("sum");
   SetTypeAndShape(output->mutable_type()->mutable_tensor_type(), 1, {60});
   std::shared_ptr<Model> model;
-  ASSERT_STATUS_OK(Model::Load(std::move(m), model, nullptr, *logger_));
+  Status st;
+  ASSERT_FALSE((st = Model::Load(std::move(m), model, nullptr, *logger_)).IsOK());
 }
 
 TEST_F(GraphTest, ExtraInput) {
