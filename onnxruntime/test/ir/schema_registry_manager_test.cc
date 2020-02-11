@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 #include <core/graph/schema_registry.h>
+#include "test/providers/provider_test_utils.h" //For ASSERT_STATUS_OK
 #include "gtest/gtest.h"
 
 ONNX_NAMESPACE::OpSchema CreateTestSchema(const char* name, const char* domain, int sinceVersion) {
